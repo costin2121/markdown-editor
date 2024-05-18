@@ -8,7 +8,7 @@ const darkmodeButton = document.getElementById("darkmode-button");
 const darkmodeIcon = document.getElementById("darkmode-icon");
 
 
-let darkModeEnabled = localStorage.getItem("md-dark-mode-enabled");
+let darkModeEnabled = localStorage.getItem("md-dark-mode-enabled") ?? true;
 setColorMode();
 const shortcuts = {
     "Ctrl+B": "Bold selected text",
