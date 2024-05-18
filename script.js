@@ -131,8 +131,8 @@ function toggleDarkMode() {
 }
 
 function setColorMode() {
+    console.log(darkModeEnabled)
     if (darkModeEnabled) {
-        // disable dark mode
 
         document.body.style.setProperty("--highlighted-text-bg", "rgb(203, 203, 203)")
         document.body.style.setProperty("--bg-color", "#e0e0e0")
@@ -147,10 +147,7 @@ function setColorMode() {
         document.body.style.setProperty("--scrollbar-thumb-bg", "rgb(141,141,141)")
 
         darkmodeIcon.className = "fa-solid fa-moon";
-        console.log('l')
     } else {
-        // enable dark mode
-        console.log('d')
 
         document.body.style.setProperty("--highlighted-text-bg", "rgb(24, 24, 24)")
         document.body.style.setProperty("--bg-color", "#333")
