@@ -1,9 +1,15 @@
 const inputArea = document.getElementById("input-area")
 const markdownOut = document.getElementById("md-out")
 const loadFileButton = document.getElementById("loadfile-button");
-const saveFileButton = document.getElementById("savefile-button");
+const saveFileDbButton = document.getElementById("savefile-db-button");
+const saveFilePcButton = document.getElementById("savefile-pc-button");
 const filename = document.getElementById("filename")
+const darkmodeButton = document.getElementById("darkmode-button");
+const darkmodeIcon = document.getElementById("darkmode-icon");
 
+
+let darkModeEnabled = localStorage.getItem("md-dark-mode-enabled");
+setColorMode();
 const shortcuts = {
     "Ctrl+B": "Bold selected text",
     "Ctrl+I": "Make selected text italic",
@@ -13,6 +19,7 @@ const shortcuts = {
     "Ctrl+S": "Save current markdown",
     "Ctrl+/ or Ctrl+H": "Markdown cheatsheet"
 }
+
 function getShortcuts(separator = "\n") {
     let res = "";
     for (const shortcut in shortcuts) {
@@ -25,7 +32,8 @@ inputArea.addEventListener('input', () => {
 })
 
 loadFileButton.addEventListener('click', importFile)
-saveFileButton.addEventListener('click', () => download(inputArea.value, `${filename.value}.md`))
+saveFilePcButton.addEventListener('click', () => download(inputArea.value, `${filename.value}.md`))
+darkmodeButton.addEventListener('click', toggleDarkMode);
 
 document.addEventListener('keydown', (e) => {
     const selection = window.getSelection().toString();
@@ -41,8 +49,10 @@ document.addEventListener('keydown', (e) => {
         if (selection) inputArea.value = inputArea.value.replace(selection, `<u>${selection}</u>`)
     } else if (ctrlPlus("3", e)) {
         e.preventDefault();
+        console.log(getLineNumber(inputArea))
         let lines = inputArea.value.split("\n")
-        const line = lines[getLineNumber(inputArea) - 1];
+        let line = lines[getLineNumber(inputArea) - 1];
+        if (line.startsWith("######")) line = line.replace("######", "")
         lines[getLineNumber(inputArea) - 1] = (line.startsWith("#") ? "#" : "# ") + line;
         lines = lines.join("\n");
         inputArea.value = lines;
@@ -74,7 +84,7 @@ function ctrlPlus(key, e) {
 function getLineNumber(textarea) {
     return textarea.value.substr(0, textarea.selectionStart) // get the substring of the textarea's value up to the cursor position
         .split("\n") // split on explicit line breaks
-        .map((line) => 1 + Math.floor(line.length / textarea.cols)) // count the number of line wraps for each split and add 1 for the explicit line break
+        .map((line) => 1 + Math.floor(line.length / 10000)) // count the number of line wraps for each split and add 1 for the explicit line break
         .reduce((a, b) => a + b, 0); // add all of these together
 };
 
@@ -111,5 +121,49 @@ function download(data, filename) {
             document.body.removeChild(a);
             window.URL.revokeObjectURL(url);
         }, 0);
+    }
+}
+
+function toggleDarkMode() {
+    darkModeEnabled = !darkModeEnabled;
+    localStorage.setItem("md-dark-mode-enabled", darkModeEnabled)
+    setColorMode();
+}
+
+function setColorMode() {
+    if (darkModeEnabled) {
+        // disable dark mode
+
+        document.body.style.setProperty("--highlighted-text-bg", "rgb(203, 203, 203)")
+        document.body.style.setProperty("--bg-color", "#e0e0e0")
+        document.body.style.setProperty("--text-color-1", "#000")
+        document.body.style.setProperty("--button-bg-color", "rgb(181,181,181)")
+        document.body.style.setProperty("--button-hover-bg-color", "rgb(158, 158, 158)")
+        document.body.style.setProperty("--input-area-bg-color", "#cbcbcb")
+        document.body.style.setProperty("--text-color", "#000")
+        document.body.style.setProperty("--filename-color", "#777")
+        document.body.style.setProperty("--md-out-bg-color", "#fff")
+        document.body.style.setProperty("--scrollbar-bg", "rgb(178,178,178)")
+        document.body.style.setProperty("--scrollbar-thumb-bg", "rgb(141,141,141)")
+
+        darkmodeIcon.className = "fa-solid fa-moon";
+        console.log('l')
+    } else {
+        // enable dark mode
+        console.log('d')
+
+        document.body.style.setProperty("--highlighted-text-bg", "rgb(24, 24, 24)")
+        document.body.style.setProperty("--bg-color", "#333")
+        document.body.style.setProperty("--text-color-1", "#999")
+        document.body.style.setProperty("--button-bg-color", "rgb(39,39,39)")
+        document.body.style.setProperty("--button-hover-bg-color", "rgb(30, 30, 30)")
+        document.body.style.setProperty("--input-area-bg-color", "#111")
+        document.body.style.setProperty("--text-color", "#fff")
+        document.body.style.setProperty("--filename-color", "#888")
+        document.body.style.setProperty("--md-out-bg-color", "#1f1f1f")
+        document.body.style.setProperty("--scrollbar-bg", "rgb(23,23,23)")
+        document.body.style.setProperty("--scrollbar-thumb-bg", "rgb(15,15,15)")
+
+        darkmodeIcon.className = "fa-solid fa-sun";
     }
 }
