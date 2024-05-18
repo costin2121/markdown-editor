@@ -8,8 +8,9 @@ const darkmodeButton = document.getElementById("darkmode-button");
 const darkmodeIcon = document.getElementById("darkmode-icon");
 
 
-let darkModeEnabled = localStorage.getItem("md-dark-mode-enabled") ?? true;
+let darkModeEnabled = localStorage.getItem("md-dark-mode-enabled") == "true";
 setColorMode();
+
 const shortcuts = {
     "Ctrl+B": "Bold selected text",
     "Ctrl+I": "Make selected text italic",
@@ -131,7 +132,6 @@ function toggleDarkMode() {
 }
 
 function setColorMode() {
-    console.log(darkModeEnabled)
     if (darkModeEnabled) {
 
         document.body.style.setProperty("--highlighted-text-bg", "rgb(203, 203, 203)")
@@ -163,4 +163,6 @@ function setColorMode() {
 
         darkmodeIcon.className = "fa-solid fa-sun";
     }
+    console.log(darkModeEnabled)
+
 }
