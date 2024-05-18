@@ -1,7 +1,7 @@
 const inputArea = document.getElementById("input-area")
 const markdownOut = document.getElementById("md-out")
 const loadFileButton = document.getElementById("loadfile-button");
-const saveFileDbButton = document.getElementById("savefile-db-button");
+// const saveFileDbButton = document.getElementById("savefile-db-button");
 const saveFilePcButton = document.getElementById("savefile-pc-button");
 const filename = document.getElementById("filename")
 const darkmodeButton = document.getElementById("darkmode-button");
